@@ -18,7 +18,7 @@ import java.io.UnsupportedEncodingException;
 public class Application {
 
     public static void main(String[] args) {
-        Spark.staticFileLocation("/public");
+        Spark.staticFileLocation("/web");
 
         post("/", (req, res) -> {
             input = req.queryMap("input").value();
@@ -27,7 +27,7 @@ public class Application {
             final boolean success = cyk.executeAlgorithm(input);
 
             return html().with(
-                    head().with(title("Result"), link().withRel("stylesheet").withHref("/main.css")),
+                    head().with(title("Result"), link().withRel("stylesheet").withHref("styles/main.css")),
                     body().with(
                             showResult(success),
                             p(showRecognitionMatrix(cyk.getInputLength()))));

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CYK</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="/thirdparty/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <h1>CYK-algoritmus implementáció Spark Java keretrendszerrel</h1>
+    <div class="row">
+        <div class="col-sm-8">
+            <form method="post" class="form-horizontal">
+                <div class="form-group">
+                    <label for="input" class="control-label">Input szó</label>
+                    <input type="text" name="input" id="input" class="form-control" required/>
+                    <label for="grammar" class="control-label">CNF-nyelvtan</label>
+                    <textarea name="grammar" id="grammar" cols="50" rows=20 class="form-control" required></textarea>
+                    <input type="submit" value="CYK futtatása" class="btn btn-primary"/>
+                    <input type="reset" value="Reset" class="btn btn-danger"/>
+                </div>
+            </form>
+            <button type="button" class="btn btn-info" href="/example.txt">Példa nyelvtanhoz kattints ide.</button>
+        </div>
+        <div class="col-sm-4">
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. In pretium consectetur nisl, quis interdum quam
+                mattis cursus. Nullam tincidunt augue et finibus euismod. Vestibulum at consequat enim, eget malesuada
+                massa. Integer ligula est, aliquam ac laoreet sit amet, pharetra vel velit. Nulla facilisi. Sed
+                vulputate diam id felis elementum pretium. Morbi dignissim lectus ante, id maximus nibh pulvinar at.
+                Morbi congue vehicula tellus, sit amet tempor magna efficitur at. Donec id convallis justo. Nullam ac
+                bibendum elit. Sed vitae metus ex. Curabitur sodales placerat ante a lacinia. Donec tincidunt pulvinar
+                ipsum, in dapibus augue dictum et. Duis molestie turpis quis erat sollicitudin convallis. Maecenas
+                cursus ullamcorper arcu, aliquet finibus lacus sagittis in.
+            </p>
+        </div>
+    </div>
+</div>
+
+<script src="/thirdparty/jquery/jquery-1.11.3.min.js"></script>
+<script src="/thirdparty/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+</body>
+</html>

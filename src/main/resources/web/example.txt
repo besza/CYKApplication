@@ -1,6 +1,0 @@
-S->AS|AB|a
-A->AB|SA|b
-B->AS|a
-
-eleme: babba
-nem eleme: abbab

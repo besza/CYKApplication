@@ -6,26 +6,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link href="/thirdparty/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <script type="text/javascript" src="/js/example.js"></script>
 </head>
 <body>
 <div class="container">
-    <h1>CYK-algoritmus implementáció Spark Java keretrendszerrel</h1>
+    <h1 align="center">CYK-algoritmus implementáció Spark Java keretrendszerrel</h1>
+    <h3>Bevezető</h3>
+    <p class="lead" align="justify">
+        A Cocke-Younger-Kasami algoritmus egy olyan alulról-felfelé haladó szintaktikai elemző, amely egy
+        tetszőleges &lambda;-mentes Chomsky-féle normálformában lévő nyelvtanhoz egy adott input szó esetén
+        megkonstruálja a levezetési fát és végeredményül eldönti, hogy az adott input szó eleme-e a nyelvtan
+        által generált nyelvnek.
+    </p>
+    <h3>Használat</h3>
+    <p align="justify">
+        A nyelvtanunk szabályait az alábbi formában adhatjuk meg: egy nemterminális karaktert nyíl követ,
+        majd a lehetséges alternatívák felsorolva <code>|</code> jellel tagolva.
+        Egy lehetséges szabály tehát így nézhet ki: <code>S->AB|C|a|b</code>
+        Az alkalmazás feltételezi, hogy a kezdőszimbólum minden esetben <code>S</code>.
+        Szükséges továbbá, hogy a nyelvtanunk Chomsky-féle normálformában legyen, ez azt jelenti, hogy minden szabály
+        kizárólag ilyen alakú lehet: <code>A->BC</code> vagy <code>A->a</code>.
+        Konvenció szerint minden nagybetű nemterminális, illetve minden kisbetű terminális szimbólumot jelöl.
+    </p>
+    
     <div class="row">
-        <div class="col-sm-8">
-            <form method="post" class="form-horizontal">
+        <div class="col-sm-6">
+            <form method="post" class="form-vertical">
                 <div class="form-group">
                     <label for="input" class="control-label">Input szó</label>
                     <input type="text" name="input" id="input" class="form-control" required/>
+                </div>
+                <div class="form-group">
                     <label for="grammar" class="control-label">CNF-nyelvtan</label>
-                    <textarea name="grammar" id="grammar" cols="50" rows=20 class="form-control" required></textarea>
+                    <textarea name="grammar" id="grammar" cols="50" rows=20 class="form-control" style="resize:none" required></textarea>
+                </div>
+                <div class="form-group">
                     <input type="submit" value="CYK futtatása" class="btn btn-primary"/>
                     <input type="reset" value="Reset" class="btn btn-danger"/>
                 </div>
             </form>
-            <button type="button" class="btn btn-info" href="/example.txt">Példa nyelvtanhoz kattints ide.</button>
+            <button type="button" class="btn btn-info" onclick="fillWithExample()">Példa nyelvtanhoz kattints ide.</button>
         </div>
-        <div class="col-sm-4">
-            <p>
+        <div class="col-sm-6">
+            <h3>Eredmény</h3>
+            <p align="justify">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. In pretium consectetur nisl, quis interdum quam
                 mattis cursus. Nullam tincidunt augue et finibus euismod. Vestibulum at consequat enim, eget malesuada
                 massa. Integer ligula est, aliquam ac laoreet sit amet, pharetra vel velit. Nulla facilisi. Sed

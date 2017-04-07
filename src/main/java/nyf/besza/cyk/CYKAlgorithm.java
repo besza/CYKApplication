@@ -1,25 +1,28 @@
 package nyf.besza.cyk;
 
+import lombok.Getter;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-/**
- * *
- *
- * @author szabolcs
- */
+
 class CYKAlgorithm {
 
     private final String grammar;
+    
+    @Getter
+    private boolean[][][] recognitionMatrix;
+    @Getter
     private final List<ProductionRule> productionRules;
-    private boolean[][][] p;
+    @Getter
+    private int inputLength;
+    
     private int r;
-    private int n;
 
-    public CYKAlgorithm(String grammar) {
+    CYKAlgorithm(String grammar) {
         this.grammar = Objects.requireNonNull(grammar, "Cannot be null!");
         productionRules = new ArrayList<>();
         parseGrammarText();
@@ -47,36 +50,36 @@ class CYKAlgorithm {
         }
     }
 
-    public boolean executeAlgorithm(String input) {
+    boolean executeAlgorithm(String input) {
         List<String> nonterminals = getNonterminalSymbols();
         
-        n = input.length();
+        inputLength = input.length();
         r = nonterminals.size();
-        p = new boolean[n][n][r];
+        recognitionMatrix = new boolean[inputLength][inputLength][r];
 
         //find the rules R_j -> a_i and flip the corresponding bool
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < inputLength; i++) {
             for (ProductionRule rule : productionRules) {
                 for (String symbol : rule.getRhs()) {
                     if (symbol.equals(input.substring(i, i + 1))) {
                         int j = nonterminals.indexOf(rule.getLhs());
-                        p[0][i][j] = true;
+                        recognitionMatrix[0][i][j] = true;
                     }
                 }
             }
         }
 
-        for (int i = 2; i <= n; i++) {
-            for (int j = 1; j <= n - i + 1; j++) {
+        for (int i = 2; i <= inputLength; i++) {
+            for (int j = 1; j <= inputLength - i + 1; j++) {
                 for (int k = 1; k <= i - 1; k++) {
                     for (ProductionRule rule : productionRules) {
                         for (String rhs : rule.getRhs()) {
                             // R_A -> R_BR_C
                             if (rhs.length() == 2) {
 
-                                if (p[k - 1][j - 1][nonterminals.indexOf(rhs.substring(0, 1))]
-                                        && p[i - k - 1][k + j - 1][nonterminals.indexOf(rhs.substring(1, 2))]) {
-                                    p[i - 1][j - 1][nonterminals.indexOf(rule.getLhs())] = true;
+                                if (recognitionMatrix[k - 1][j - 1][nonterminals.indexOf(rhs.substring(0, 1))]
+                                        && recognitionMatrix[i - k - 1][k + j - 1][nonterminals.indexOf(rhs.substring(1, 2))]) {
+                                    recognitionMatrix[i - 1][j - 1][nonterminals.indexOf(rule.getLhs())] = true;
                                 }
                             }
                         }
@@ -85,26 +88,12 @@ class CYKAlgorithm {
             }
         }
 
-        return (p[n - 1][0][0]);
+        return (recognitionMatrix[inputLength - 1][0][0]);
     }
 
     @Override
     public String toString() {
         return "CYKAlgorithm{" + "grammar=" + grammar + ", productionRules=" + productionRules + '}';
-    }
-
-
-
-    public List<ProductionRule> getProductionRules() {
-        return productionRules;
-    }
-
-    public boolean[][][] getRecognitionMatrix() {
-        return p;
-    }
-
-    public int getInputLength() {
-        return n;
     }
 
     /**
@@ -115,28 +104,14 @@ class CYKAlgorithm {
      * @return Returns the concatenated grammar rules which can generate the
      * subsequence of length i starting from j.
      */
-    public String getSubsequenceRules(int i, int j) {
+    String getSubsequenceRules(int i, int j) {
         StringBuilder sb = new StringBuilder("");
         List<String> nonterminals = getNonterminalSymbols(); //DRY !!
-        for (int k = 0; k < p[i][j].length; k++) {
-            if (p[i][j][k]) {
+        for (int k = 0; k < recognitionMatrix[i][j].length; k++) {
+            if (recognitionMatrix[i][j][k]) {
                 sb.append(nonterminals.get(k));
             }
         }
         return sb.toString();
     }
-
-    private void debugPrint() {
-        for (int i = 0; i < p.length; i++) {
-            for (int j = 0; j < p[i].length; j++) {
-                System.out.println("(" + i + " " + j + ")");
-                for (int k = 0; k < p[i][j].length; k++) {
-                    System.out.print(p[i][j][k] + " ");
-                }
-                System.out.println("");
-            }
-        }
-        productionRules.forEach(System.out::println);
-    }
-
 }

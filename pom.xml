@@ -10,7 +10,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <spark.core.version>2.3</spark.core.version>
+        <lombok.version>1.16.8</lombok.version>
+        <j2html.version>0.7</j2html.version>
     </properties>
+    
     <build>
         <plugins>
             <plugin>
@@ -23,8 +27,8 @@
                         </goals>
                     </execution>
                 </executions>
+                
                 <configuration>
-
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
@@ -35,23 +39,28 @@
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
-
                 </configuration>
             </plugin>
         </plugins>
     </build>
+    
     <dependencies>
         <dependency>
             <groupId>com.sparkjava</groupId>
             <artifactId>spark-core</artifactId>
-            <version>2.3</version>
+            <version>${spark.core.version}</version>
         </dependency>
         <dependency>
             <groupId>com.j2html</groupId>
             <artifactId>j2html</artifactId>
-            <version>0.7</version>
+            <version>${j2html.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
     
     

@@ -13,32 +13,17 @@
         <spark.core.version>2.3</spark.core.version>
         <lombok.version>1.16.8</lombok.version>
         <j2html.version>0.7</j2html.version>
+        <exec.plugin.version>1.2.1</exec.plugin.version>
     </properties>
     
     <build>
         <plugins>
             <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>${exec.plugin.version}</version>
                 <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>nyf.besza.cyk.Application</mainClass>
-                        </manifest>
-                    </archive>
-
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
+                    <mainClass>nyf.besza.cyk.Application</mainClass>
                 </configuration>
             </plugin>
         </plugins>

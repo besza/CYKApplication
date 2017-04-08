@@ -1,21 +1,20 @@
 package nyf.besza.cyk;
 
+import spark.ModelAndView;
 import spark.Spark;
-import static spark.Spark.post;
-import static j2html.TagCreator.body;
-import static j2html.TagCreator.head;
-import static j2html.TagCreator.html;
-import static j2html.TagCreator.link;
-import static j2html.TagCreator.p;
-import static j2html.TagCreator.title;
-import j2html.tags.Tag;
-import java.io.UnsupportedEncodingException;
+import spark.template.velocity.VelocityTemplateEngine;
 
-/**
- *
- * @author szabolcs
- */
+import java.util.HashMap;
+import java.util.Map;
+
+import static spark.Spark.get;
+import static spark.Spark.post;
+
 public class Application {
+
+    private static final String TEMPLATE = "index.vm";
+    private static CYKAlgorithm cyk;
+    private static String input;
 
     public static void main(String[] args) {
         Spark.staticFileLocation("/web");
@@ -25,37 +24,39 @@ public class Application {
             String grammar = req.queryMap("grammar").value();
             cyk = new CYKAlgorithm(grammar);
             final boolean success = cyk.executeAlgorithm(input);
+            Map<String, Object> model = new HashMap<>();
+            model.put("table_body", generateRecognitionMatrix(input.length()));
+            if (success) {
+                model.put("can_generate", input + " szó eleme a nyelvtan által generált nyelvnek.");
+            } else {
+                model.put("can_generate", input + " a szó nem eleme a nyelvtan által generált nyelvnek.");
+            }
+            model.put("visibile", "block");
+            return new VelocityTemplateEngine().render(new ModelAndView(model, TEMPLATE));
+        });
 
-            return html().with(
-                    head().with(title("Result"), link().withRel("stylesheet").withHref("styles/main.css")),
-                    body().with(
-                            showResult(success),
-                            p(showRecognitionMatrix(cyk.getInputLength()))));
+        get("/", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            model.put("visible", "hidden");
+            return new VelocityTemplateEngine().render(new ModelAndView(model, TEMPLATE));
         });
     }
-    
-    private static CYKAlgorithm cyk;
-    private static String input;
 
-    private static Tag showResult(boolean success) {
-        if (success) {
-            return p(input + " eleme L(G)-nek.");
-        } else {
-            return p(input + " nem eleme L(G)-nek.");
-        }
-    }
-
-    private static String showRecognitionMatrix(int size){
+    private static String generateRecognitionMatrix(int size) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < size; ++i) {
+            sb.append("<tr>");
             for (int j = 0; j < size; ++j) {
+                sb.append("<td>");
                 String rules = cyk.getSubsequenceRules(i, j);
-                if (rules.isEmpty())
+                if (rules.isEmpty()) {
                     sb.append("-");
-                else sb.append(rules);
-                sb.append("\t\t");
+                } else {
+                    sb.append(rules);
+                }
+                sb.append("</td>");
             }
-            sb.append("\n");
+            sb.append("</tr>");
         }
         return sb.toString();
     }

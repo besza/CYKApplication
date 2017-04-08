@@ -32,6 +32,7 @@
     
     <div class="row">
         <div class="col-sm-6">
+            <h3>Alkalmazás</h3>
             <form method="post" class="form-vertical">
                 <div class="form-group">
                     <label for="input" class="control-label">Input szó</label>
@@ -39,7 +40,7 @@
                 </div>
                 <div class="form-group">
                     <label for="grammar" class="control-label">CNF-nyelvtan</label>
-                    <textarea name="grammar" id="grammar" cols="50" rows=20 class="form-control" style="resize:none" required></textarea>
+                    <textarea name="grammar" id="grammar" cols="50" rows="15" class="form-control" style="resize:none" required></textarea>
                 </div>
                 <div class="form-group">
                     <input type="submit" value="CYK futtatása" class="btn btn-primary"/>
@@ -48,18 +49,14 @@
             </form>
             <button type="button" class="btn btn-info" onclick="fillWithExample()">Példa nyelvtanhoz kattints ide.</button>
         </div>
-        <div class="col-sm-6">
-            <h3>Eredmény</h3>
-            <p align="justify">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. In pretium consectetur nisl, quis interdum quam
-                mattis cursus. Nullam tincidunt augue et finibus euismod. Vestibulum at consequat enim, eget malesuada
-                massa. Integer ligula est, aliquam ac laoreet sit amet, pharetra vel velit. Nulla facilisi. Sed
-                vulputate diam id felis elementum pretium. Morbi dignissim lectus ante, id maximus nibh pulvinar at.
-                Morbi congue vehicula tellus, sit amet tempor magna efficitur at. Donec id convallis justo. Nullam ac
-                bibendum elit. Sed vitae metus ex. Curabitur sodales placerat ante a lacinia. Donec tincidunt pulvinar
-                ipsum, in dapibus augue dictum et. Duis molestie turpis quis erat sollicitudin convallis. Maecenas
-                cursus ullamcorper arcu, aliquet finibus lacus sagittis in.
-            </p>
+        <div class="col-sm-6" style="visibility: $visible">
+            <h3>Felismerési mátrix</h3>
+            <table class="table">
+                <tbody>
+                    $table_body
+                </tbody>
+            </table>
+            <p> $can_generate </p>
         </div>
     </div>
 </div>

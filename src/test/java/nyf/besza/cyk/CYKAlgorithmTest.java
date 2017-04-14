@@ -9,10 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-/**
- *
- * @author User
- */
 public class CYKAlgorithmTest {
     
     private final String grammar1 = 
@@ -23,8 +19,8 @@ public class CYKAlgorithmTest {
     
     private CYKAlgorithm cyk;
     
-    public CYKAlgorithmTest() {
-        cyk = new CYKAlgorithm(grammar1);
+    public CYKAlgorithmTest() throws GrammarParserException {
+        cyk = new CYKAlgorithm(GrammarParser.parseGrammar(grammar1));
     }
     
     @Before

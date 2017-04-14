@@ -1,5 +1,7 @@
 package nyf.besza.cyk;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import spark.ModelAndView;
 import spark.Spark;
 import spark.template.velocity.VelocityTemplateEngine;
@@ -7,38 +9,89 @@ import spark.template.velocity.VelocityTemplateEngine;
 import java.util.HashMap;
 import java.util.Map;
 
-import static spark.Spark.get;
-import static spark.Spark.post;
+import static spark.Spark.*;
 
 public class Application {
 
     private static final String TEMPLATE = "index.vm";
+
+    private static final String INPUT_PARAM = "input";
+
+    private static final String GRAMMAR_PARAM = "grammar";
+
+    private static final String STATIC_PARAM_LOCATION = "/web";
+
+    private static final String DEFAULT_PATH = "/";
+
+    private static final String EMPTY_STRING = "";
+
+    private static final VelocityTemplateEngine velocityTemplateEngine = new VelocityTemplateEngine();
+
     private static CYKAlgorithm cyk;
-    private static String input;
+
+    @Data
+    @AllArgsConstructor
+    private static final class Model {
+        String grammar;
+        String errorMessage;
+        String result;
+
+        final String GRAMMAR = "grammar";
+        final String ERROR = "error_message";
+        final String RESULT = "result";
+
+
+        Map<String, Object> createModelMap() {
+            Map<String, Object> modelMap = new HashMap<>();
+            modelMap.put(ERROR, errorMessage);
+            modelMap.put(GRAMMAR, grammar);
+            modelMap.put(RESULT, result);
+            return modelMap;
+        }
+    }
 
     public static void main(String[] args) {
-        Spark.staticFileLocation("/web");
+        Spark.staticFileLocation(STATIC_PARAM_LOCATION);
 
-        post("/", (req, res) -> {
-            input = req.queryMap("input").value();
-            String grammar = req.queryMap("grammar").value();
-            cyk = new CYKAlgorithm(grammar);
-            final boolean success = cyk.executeAlgorithm(input);
-            Map<String, Object> model = new HashMap<>();
-            model.put("table_body", generateRecognitionMatrix(input.length()));
-            if (success) {
-                model.put("can_generate", input + " szó eleme a nyelvtan által generált nyelvnek.");
-            } else {
-                model.put("can_generate", input + " a szó nem eleme a nyelvtan által generált nyelvnek.");
-            }
-            model.put("visibile", "block");
-            return new VelocityTemplateEngine().render(new ModelAndView(model, TEMPLATE));
+        get(DEFAULT_PATH, (request, response) -> {
+            Model defaultModel = new Model(EMPTY_STRING, EMPTY_STRING, EMPTY_STRING);
+            return velocityTemplateEngine.render(new ModelAndView(defaultModel.createModelMap(), TEMPLATE));
         });
 
-        get("/", (req, res) -> {
-            Map<String, Object> model = new HashMap<>();
-            model.put("visible", "hidden");
-            return new VelocityTemplateEngine().render(new ModelAndView(model, TEMPLATE));
+        post(DEFAULT_PATH, (request, response) -> {
+            String input = request.queryMap(INPUT_PARAM).value();
+            String text = request.queryMap(GRAMMAR_PARAM).value();
+
+            Grammar grammar = GrammarParser.parseGrammar(text);
+
+            cyk = new CYKAlgorithm(grammar);
+
+            final boolean success = cyk.executeAlgorithm(input);
+
+            StringBuilder resultHTML = new StringBuilder();
+            resultHTML.append("<div class=\"col-sm-6\">")
+                    .append("<h3>Felismerési mátrix</h3>")
+                    .append("<table class=\"table\">")
+                    .append(generateRecognitionMatrix(input.length()))
+                    .append("</table>");
+
+            if (success) {
+                resultHTML.append("<p class=\"bg-success\">").append(input).append(" eleme a nyelvtan által generált nyelvnek");
+            } else {
+                resultHTML.append("<p class=\"bg-danger\">").append(input).append(" nem eleme a nyelvtan által generált nyelvnek");
+            }
+            resultHTML.append("</p>")
+                    .append("</div>");
+
+            Model postModel = new Model(request.queryMap(GRAMMAR_PARAM).value(), EMPTY_STRING, resultHTML.toString());
+
+            return velocityTemplateEngine.render(new ModelAndView(postModel.createModelMap(), TEMPLATE));
+        });
+
+        exception(GrammarParserException.class, (exception, request, response) -> {
+            Model exceptionModel = new Model(request.queryMap(GRAMMAR_PARAM).value(), exception.getMessage(), EMPTY_STRING);
+            response.status(500);
+            response.body(velocityTemplateEngine.render(new ModelAndView(exceptionModel.createModelMap(), TEMPLATE)));
         });
     }
 
@@ -60,5 +113,4 @@ public class Application {
         }
         return sb.toString();
     }
-
 }

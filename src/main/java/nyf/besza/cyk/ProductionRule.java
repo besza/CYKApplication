@@ -1,20 +1,15 @@
 package nyf.besza.cyk;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Value;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Data
-@AllArgsConstructor
-@EqualsAndHashCode
+@Value
 class ProductionRule {
-    @Getter
+
     private final String lhs;
-    @Getter
+
     private final List<String> rhs;
 
     @Override

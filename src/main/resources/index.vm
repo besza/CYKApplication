@@ -14,22 +14,26 @@
     <h1 align="center">CYK-algoritmus implementáció Spark Java keretrendszerrel</h1>
     <h3>Bevezető</h3>
     <p class="lead" align="justify">
-        A Cocke-Younger-Kasami algoritmus egy olyan alulról-felfelé haladó szintaktikai elemző, amely egy
-        tetszőleges &lambda;-mentes Chomsky-féle normálformában lévő nyelvtanhoz egy adott input szó esetén
-        megkonstruálja a levezetési fát és végeredményül eldönti, hogy az adott input szó eleme-e a nyelvtan
-        által generált nyelvnek.
+        A Cocke-Younger-Kasami algoritmus egy szintaktikai elemző, amely egy tetszőleges &lambda;-mentes Chomsky-féle
+        normálformában lévő nyelvtanhoz egy adott input szó esetén megkonstruálja a levezetési fát és végeredményül eldönti,
+        hogy az input szó eleme-e a nyelvtan által generált nyelvnek.
+        A módszer sajátossága, hogy a levezetési fát alulról-felfelé készítjük el és
+        ha a fa gyökér elemében megjelenik a mondatszimbólum, akkor ez azt jelenti, hogy a vizsgált szó sikeresen
+        generálható az adott nyelvtannal, különben nem.
     </p>
     <h3>Használat</h3>
     <p align="justify">
-        A nyelvtanunk szabályait az alábbi formában adhatjuk meg: egy nemterminális karaktert nyíl követ,
-        majd a lehetséges alternatívák felsorolva <code>|</code> jellel tagolva.
-        Egy lehetséges szabály tehát így nézhet ki: <code>S->AB|C|a|b</code>
+        A nyelvtanunk szabályait az alábbi formában adhatjuk meg: egy nemterminális karaktert egy nyíl <code>-></code> követ,
+        majd a lehetséges alternatívák egy <code>|</code> jellel tagolva.
+        Egy szabály tehát ilyen alakú lehet: <code>S->AB|C|a|b</code>
+        Konvenció szerint minden nagybetű nemterminális, illetve minden kisbetű terminális szimbólumot jelöl.
         Az alkalmazás feltételezi, hogy a kezdőszimbólum minden esetben <code>S</code>.
         Szükséges továbbá, hogy a nyelvtanunk Chomsky-féle normálformában legyen, ez azt jelenti, hogy minden szabály
         kizárólag ilyen alakú lehet: <code>A->BC</code> vagy <code>A->a</code>.
-        Konvenció szerint minden nagybetű nemterminális, illetve minden kisbetű terminális szimbólumot jelöl.
     </p>
-    
+
+    $error_message
+
     <div class="row">
         <div class="col-sm-6">
             <h3>Alkalmazás</h3>
@@ -40,24 +44,15 @@
                 </div>
                 <div class="form-group">
                     <label for="grammar" class="control-label">CNF-nyelvtan</label>
-                    <textarea name="grammar" id="grammar" cols="50" rows="15" class="form-control" style="resize:none" required></textarea>
+                    <textarea name="grammar" id="grammar" cols="50" rows="15" class="form-control" style="resize:none" required>$grammar</textarea>
                 </div>
                 <div class="form-group">
                     <input type="submit" value="CYK futtatása" class="btn btn-primary"/>
-                    <input type="reset" value="Reset" class="btn btn-danger"/>
                 </div>
             </form>
             <button type="button" class="btn btn-info" onclick="fillWithExample()">Példa nyelvtanhoz kattints ide.</button>
         </div>
-        <div class="col-sm-6" style="visibility: $visible">
-            <h3>Felismerési mátrix</h3>
-            <table class="table">
-                <tbody>
-                    $table_body
-                </tbody>
-            </table>
-            <p> $can_generate </p>
-        </div>
+        $result
     </div>
 </div>
 

@@ -10,7 +10,7 @@ class GrammarParser {
 
     private static final String EMPTY_STRING = "";
     
-    private static final Pattern TERMINAL_PATTERN = Pattern.compile("[a-z]+");
+    private static final Pattern TERMINAL_PATTERN = Pattern.compile("[a-z]");
     
     private static final Pattern NONTERMINAL_PATTERN = Pattern.compile("[A-Z]");
     
@@ -30,7 +30,7 @@ class GrammarParser {
                 if (NONTERMINAL_PATTERN.matcher(lhs).matches()) {
                     nonTerminals.add(lhs);
                 } else {
-                    throw new GrammarParserException("Levezetési szabály hibás bal oldallal: " + lhs + "!");
+                    throw new GrammarParserException("Levezetési szabály hibás baloldallal: " + lhs + " !");
                 }
                 
                 String rhs = rule[1];
@@ -44,7 +44,7 @@ class GrammarParser {
                         } else if (CHOMSKY_NORMAL_FORM_PATTERN.matcher(alt).matches()) {
                             ruleAlternatives.add(alt);
                         } else {
-                            throw new GrammarParserException("Levezetési szabály jobb oldala nem CNF: " + alt + "!");
+                            throw new GrammarParserException("Levezetési szabály jobb oldala nem CNF: " + alt + " !");
                         }
                     }
                     rules.add(new ProductionRule(lhs, ruleAlternatives));
@@ -52,7 +52,7 @@ class GrammarParser {
                     throw new GrammarParserException("Levezetési szabály jobb oldala hiányzik!");
                 }
             } else {
-                throw new GrammarParserException("Hiba a levezetési szabály alakjában: " + whiteSpaceFree + "!");
+                throw new GrammarParserException("Hiba a levezetési szabály alakjában: " + whiteSpaceFree + " !");
             }
             
         }

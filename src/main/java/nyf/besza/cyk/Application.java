@@ -89,7 +89,12 @@ public class Application {
         });
 
         exception(GrammarParserException.class, (exception, request, response) -> {
-            Model exceptionModel = new Model(request.queryMap(GRAMMAR_PARAM).value(), exception.getMessage(), EMPTY_STRING);
+            StringBuilder exceptionHTML = new StringBuilder();
+            exceptionHTML.append("<div class=\"alert alert-danger\">")
+                    .append(exception.getMessage())
+                    .append("</div>");
+            
+            Model exceptionModel = new Model(request.queryMap(GRAMMAR_PARAM).value(), exceptionHTML.toString(), EMPTY_STRING);
             response.status(500);
             response.body(velocityTemplateEngine.render(new ModelAndView(exceptionModel.createModelMap(), TEMPLATE)));
         });
@@ -97,7 +102,7 @@ public class Application {
 
     private static String generateRecognitionMatrix(int size) {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < size; ++i) {
+        for (int i = size - 1; i >= 0; --i) {
             sb.append("<tr>");
             for (int j = 0; j < size; ++j) {
                 sb.append("<td>");

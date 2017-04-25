@@ -19,11 +19,13 @@ public class Application {
 
     private static final String GRAMMAR_PARAM = "grammar";
 
-    private static final String STATIC_PARAM_LOCATION = "/web";
+    private static final String STATIC_FILES_LOCATION = "/web";
 
     private static final String DEFAULT_PATH = "/";
 
     private static final String EMPTY_STRING = "";
+    
+    private static final String NO_BREAK_SPACE_ENTITY = "&nbsp";
 
     private static final VelocityTemplateEngine velocityTemplateEngine = new VelocityTemplateEngine();
 
@@ -51,7 +53,7 @@ public class Application {
     }
 
     public static void main(String[] args) {
-        Spark.staticFileLocation(STATIC_PARAM_LOCATION);
+        Spark.staticFileLocation(STATIC_FILES_LOCATION);
 
         get(DEFAULT_PATH, (request, response) -> {
             Model defaultModel = new Model(EMPTY_STRING, EMPTY_STRING, EMPTY_STRING);
@@ -108,7 +110,7 @@ public class Application {
                 sb.append("<td>");
                 String rules = cyk.getSubsequenceRules(i, j);
                 if (rules.isEmpty()) {
-                    sb.append("-");
+                    sb.append(NO_BREAK_SPACE_ENTITY);
                 } else {
                     sb.append(rules);
                 }

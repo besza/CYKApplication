@@ -24,33 +24,12 @@ public class Application {
     private static final String DEFAULT_PATH = "/";
 
     private static final String EMPTY_STRING = "";
-    
+
     private static final String NO_BREAK_SPACE_ENTITY = "&nbsp";
 
     private static final VelocityTemplateEngine velocityTemplateEngine = new VelocityTemplateEngine();
 
     private static CYKAlgorithm cyk;
-
-    @Data
-    @AllArgsConstructor
-    private static final class Model {
-        String grammar;
-        String errorMessage;
-        String result;
-
-        final String GRAMMAR = "grammar";
-        final String ERROR = "error_message";
-        final String RESULT = "result";
-
-
-        Map<String, Object> createModelMap() {
-            Map<String, Object> modelMap = new HashMap<>();
-            modelMap.put(ERROR, errorMessage);
-            modelMap.put(GRAMMAR, grammar);
-            modelMap.put(RESULT, result);
-            return modelMap;
-        }
-    }
 
     public static void main(String[] args) {
         Spark.staticFileLocation(STATIC_FILES_LOCATION);
@@ -95,7 +74,7 @@ public class Application {
             exceptionHTML.append("<div class=\"alert alert-danger\">")
                     .append(exception.getMessage())
                     .append("</div>");
-            
+
             Model exceptionModel = new Model(request.queryMap(GRAMMAR_PARAM).value(), exceptionHTML.toString(), EMPTY_STRING);
             response.status(500);
             response.body(velocityTemplateEngine.render(new ModelAndView(exceptionModel.createModelMap(), TEMPLATE)));
@@ -119,5 +98,24 @@ public class Application {
             sb.append("</tr>");
         }
         return sb.toString();
+    }
+
+    @Data
+    @AllArgsConstructor
+    private static final class Model {
+        final String GRAMMAR = "grammar";
+        final String ERROR = "error_message";
+        final String RESULT = "result";
+        String grammar;
+        String errorMessage;
+        String result;
+
+        Map<String, Object> createModelMap() {
+            Map<String, Object> modelMap = new HashMap<>();
+            modelMap.put(ERROR, errorMessage);
+            modelMap.put(GRAMMAR, grammar);
+            modelMap.put(RESULT, result);
+            return modelMap;
+        }
     }
 }

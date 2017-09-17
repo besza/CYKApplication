@@ -2,24 +2,22 @@ package nyf.besza.cyk;
 
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 
 class CYKAlgorithm {
 
     @Getter
     private final Grammar grammar;
-
+    private final List<String> nonTerminalsList;
     @Getter
     private boolean[][][] recognitionMatrix;
 
-    private final List<String> nonTerminalsList;
-
     CYKAlgorithm(Grammar grammar) {
         this.grammar = Objects.requireNonNull(grammar, "A nyelvtan nem lehet üres!");
-        nonTerminalsList = grammar.getNonTerminals().stream().collect(Collectors.toList());
+        nonTerminalsList = new ArrayList<>(grammar.getNonTerminals());
     }
 
     boolean executeAlgorithm(String input) {

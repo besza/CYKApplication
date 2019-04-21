@@ -3,7 +3,6 @@ package nyf.besza.cyk;
 import lombok.Value;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Value
 class ProductionRule {
@@ -14,6 +13,6 @@ class ProductionRule {
 
     @Override
     public String toString() {
-        return lhs + "->" + rhs.stream().collect(Collectors.joining("|"));
+        return lhs + "->" + String.join("|", rhs);
     }
 }

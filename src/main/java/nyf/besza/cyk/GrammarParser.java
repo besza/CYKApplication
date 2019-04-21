@@ -17,6 +17,10 @@ class GrammarParser {
     private static final Pattern CHOMSKY_NORMAL_FORM_PATTERN = Pattern.compile("[A-Z]{2}");
 
     static Grammar parseGrammar(String rawInput) throws GrammarParserException {
+        if (rawInput == null) {
+            throw new GrammarParserException("A nyelvtan bemenete nem lehet a null sztring!");
+        }
+
         Set<String> terminals = new HashSet<>();
         Set<String> nonTerminals = new HashSet<>();
         Set<ProductionRule> rules = new HashSet<>();
@@ -54,7 +58,6 @@ class GrammarParser {
             } else {
                 throw new GrammarParserException("Hiba a levezetési szabály alakjában: " + whiteSpaceFree + " !");
             }
-
         }
 
         return new Grammar(terminals, nonTerminals, rules);

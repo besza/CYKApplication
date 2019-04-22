@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>CYK</title>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link href="/thirdparty/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
@@ -32,19 +32,17 @@
         kizárólag ilyen alakú lehet: <code>A->BC</code> vagy <code>A->a</code>.
     </p>
 
-    $error_message
-
     <div class="row">
         <div class="col-sm-6">
             <h3>Alkalmazás</h3>
-            <form method="post" class="form-vertical">
+            <form action="#" th:method="@{/}" th:object="${cykForm}" method="post" class="form-vertical">
                 <div class="form-group">
                     <label for="input" class="control-label">Input szó</label>
-                    <input type="text" name="input" id="input" class="form-control" required/>
+                    <input th:field="*{input}" type="text" name="input" id="input" class="form-control" required/>
                 </div>
                 <div class="form-group">
                     <label for="grammar" class="control-label">CNF-nyelvtan</label>
-                    <textarea name="grammar" id="grammar" cols="50" rows="15" class="form-control" style="resize:none" required>$grammar</textarea>
+                    <textarea th:field="*{grammar}" name="grammar" id="grammar" cols="50" rows="15" class="form-control" style="resize:none" required></textarea>
                 </div>
                 <div class="form-group">
                     <input type="submit" value="CYK futtatása" class="btn btn-primary"/>
@@ -52,7 +50,6 @@
             </form>
             <button type="button" class="btn btn-info" onclick="fillWithExample()">Példa nyelvtanhoz kattints ide.</button>
         </div>
-        $result
     </div>
 </div>
 
